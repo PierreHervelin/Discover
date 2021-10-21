@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { Track } from '../class/Track';
-import { Card, CardTrack } from '../components/Card';
-import { getTrack } from '../functions/GetElements';
+import { Card } from '../components/Card';
 
 const Home = () => {
     const clickButton=(e)=>{
@@ -12,22 +10,31 @@ const Home = () => {
             e.target.style.display='none'
         }, 1000);
     }
-    const afterClick=async()=>{
+    const afterClick=()=>{
         const home=document.getElementById('Home')
         const trackList=document.querySelector('.trackList')
 
-        home.style.backgroundColor='#145A32'
+        home.style.backgroundColor='#1DB954'
         trackList.style.opacity=1
-        trackList.style.display='flex'
 
-        const track=await getTrack('1MF6t2YiYGhyPxsN5DNbjB')
-        const card=new Card(new Track(track))
-        card.render()
+        let i=0
+        const children=trackList.children
+        let interval=setInterval(() => {
+            if(i>=children.length){
+                clearInterval(interval)
+                return
+            }
+            children[i].style.opacity=1
+            i++
+        }, 2000);
     }
+
     return (
         <main id='Home'>
             <div className='trackList'>
                 <Card idTrack='4UP8KDfTIQUOXVjtg9h9ia'/>
+                <Card idTrack='3fHFpZGEnzkocwC1xKSoNY'/>
+                <Card idTrack='4d6z0mKVcnhE5x0YWvTexh'/>
             </div>
             <div className='searchButton'>
                 <div id='first'></div>

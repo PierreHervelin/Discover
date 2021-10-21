@@ -4,10 +4,33 @@
     justify-content: center;
     align-items: center;
 
+    position: relative;
+    opacity: 0;
+    transition: opacity 1s,transform 1.5s;
+
     background: $green;
     width: fit-content;
     height: fit-content;
-    overflow: hidden;
+
+    &:hover{
+        .animDiv{
+            opacity: 1;
+            transform: translate(-50%,-50%) scale(1);
+        }
+    }
+
+    .animDiv{
+        pointer-events: none;
+        opacity: 0;
+        width: 1000px;
+        height: 1000px;
+        border-radius: 50%;
+        z-index: -1;
+        transition: transform 1s ease, opacity 0.5s;
+
+        @extend %mid;
+        transform: translate(-50%,-50%) scale(0.01)
+    }
 
     .coverAlbum{
         @extend %cover;
@@ -15,10 +38,12 @@
         height: $coverSize;
 
         position: relative;
+        transform: scale(1);
 
         transition: transform 2s;
 
         &:hover{
+            z-index: 5;
             transform: scale(1.1);
         }
 
