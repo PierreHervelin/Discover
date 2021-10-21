@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'montserrat';
+    src: url('../assets/fonts/Montserrat-Regular.ttf');
+}
+
+$green:#145A32;
+$green2:#1E8449;
+$green3:#27AE60;
+$background:#222;
+$subBackground:#333;
+
+$coverSize:400px;
+
+%col{
+    display: flex;
+    flex-direction: column;
+}
+%row{
+    display: flex;
+    flex-direction: row;
+}
+%cover{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+%mid{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+}

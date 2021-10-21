@@ -1,0 +1,83 @@
+#Home{
+    position: relative;
+    .trackList{
+        @extend %row;
+        justify-content: center;
+        align-items: center;
+
+        @extend %mid;
+        display: none;
+        opacity: 0;
+        transition: opacity 1s;
+    
+        width: 100vw;
+        height: fit-content;
+    }
+    .searchButton{
+        @extend %col;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        pointer-events: none;
+
+        &:hover{
+            div{
+                transform: translate(-50%,-50%) scale(300);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width:1000px) {
+            &:hover{
+                div{
+                    transform: translate(-50%,-50%) scale(200);
+                    opacity: 1;
+                }
+            }
+        }
+
+        div{
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            border-radius: 50%;
+        }
+        #first{
+            background: $green3;
+            transition: transform 1s ease,opacity 0.1s;
+        }
+        #second{
+            background: $green2;
+            transition: transform 1s ease 0.1s,opacity 0.1s 0.1s;
+        }
+        #last{
+            background: $green;
+            transition: transform 1s ease 0.2s,opacity 0.2s 0.1s;
+        }
+
+        button{
+            padding: 10px;
+            width: 150px;
+            height: 50px;
+            border-radius: 30px;
+            border: none;
+            font-size: 20px;
+            transition: all 1s;
+            pointer-events: auto;
+
+            &:hover{
+                background: $green;
+                color: white;
+                transform: scale(1.1);
+                cursor: pointer;
+            }
+        }
+    }
+}

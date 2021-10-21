@@ -1,0 +1,51 @@
+.CardAlbum{
+    //flex
+    @extend %col;
+    justify-content: center;
+    align-items: center;
+
+    background: $green;
+    width: fit-content;
+    height: fit-content;
+    overflow: hidden;
+
+    .coverAlbum{
+        @extend %cover;
+        width: $coverSize;
+        height: $coverSize;
+
+        position: relative;
+
+        transition: transform 2s;
+
+        &:hover{
+            transform: scale(1.1);
+        }
+
+        div{
+            @extend %col;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(black, 0.5);
+            backdrop-filter: blur(1px);
+            opacity: 0;
+            transition: opacity 1s;
+
+            &:hover{
+                opacity: 1;
+                cursor: pointer;
+            }
+
+            h3{
+                font-size: 20px;
+                color: white;
+                text-shadow: 1px 1px 0 black;
+                font-family: 'montserrat';
+            }
+        }
+    }
+}
