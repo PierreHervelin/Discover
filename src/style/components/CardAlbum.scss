@@ -1,11 +1,9 @@
 .CardAlbum{
-    //flex
     @extend %col;
     justify-content: center;
     align-items: center;
 
     position: relative;
-    opacity: 0;
     transition: opacity 1s,transform 1.5s;
 
     background: $green;
@@ -25,11 +23,27 @@
         width: 1000px;
         height: 1000px;
         border-radius: 50%;
-        z-index: -1;
-        transition: transform 1s ease, opacity 0.5s;
 
         @extend %mid;
-        transform: translate(-50%,-50%) scale(0.01)
+        transform: translate(-50%,-50%) scale(0.01);
+
+        @media (min-width:1600px) {
+            width: 1200px;
+            height: 1200px;
+        }
+
+        &#first{
+            z-index: -1;
+            transition: transform 1s ease 0.2s, opacity 0.5s;
+        }
+        &#second{
+            z-index: -2;
+            transition: transform 1s ease 0.1s, opacity 0.5s;
+        }
+        &#last{
+            z-index: -3;
+            transition: transform 1s ease, opacity 0.5s;
+        }
     }
 
     .coverAlbum{
@@ -41,6 +55,15 @@
         transform: scale(1);
 
         transition: transform 2s;
+
+        @media (max-width:1000px) {
+            width: calc($coverSize*0.75);
+            height: calc($coverSize*0.75);
+        }
+        @media (min-width:1600px) {
+            width: calc($coverSize*1.10);
+            height: calc($coverSize*1.10);
+        }
 
         &:hover{
             z-index: 5;
@@ -70,6 +93,21 @@
                 color: white;
                 text-shadow: 1px 1px 0 black;
                 font-family: 'montserrat';
+            }
+            button{
+                font-size: 20px;
+                text-align: center;
+                border: none;
+                border-radius: 50%;
+                height: 40px;
+                width: 40px;
+                transition: all 1s;
+
+                &:hover{
+                    cursor: pointer;
+                    background: $green;
+                    color: white;
+                }
             }
         }
     }

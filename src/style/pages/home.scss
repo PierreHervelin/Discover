@@ -1,18 +1,6 @@
 #Home{
     position: relative;
     overflow: hidden;
-    .trackList{
-        @extend %row;
-        justify-content: space-around;
-        align-items: center;
-
-        @extend %mid;
-        opacity: 0;
-        transition: opacity 3s;
-    
-        width: 100vw;
-        height: fit-content;
-    }
     .searchButton{
         @extend %col;
         justify-content: center;
@@ -62,10 +50,15 @@
             transition: transform 1s ease 0.2s,opacity 0.2s 0.1s;
         }
 
-        button{
-            padding: 10px;
+        a{
+            padding: 15px 10px 15px 10px;
             width: 150px;
-            height: 50px;
+            background: white;
+            color: black;
+            text-decoration: none;
+            font-family: 'montserrat';
+            font-weight: bold;
+            text-align: center;
             border-radius: 30px;
             border: none;
             font-size: 20px;
