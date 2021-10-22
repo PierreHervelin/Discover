@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Card } from '../components/Card';
+import Load from '../components/Load';
 import { AccessToken } from '../functions/Auth';
 
 const Home = () => {
@@ -18,7 +19,7 @@ const Home = () => {
                 <div id='second'></div>
                 <div id='last'></div>
                 <motion.a
-                    href={`/suggestion#access_token=${AccessToken}`}
+                    href={`/playlist#access_token=${AccessToken}`}
                     onClick={clickButton}
                     animate={{opacity:1}}
                     transition={{

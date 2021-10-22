@@ -1,0 +1,45 @@
+#Open{
+    @extend %col;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: $green;
+
+    .searchBar{
+        @extend %col;
+        justify-content: center;
+        align-items: center;
+
+        position: relative;
+        width: 100vw;
+        height: 30vh;
+
+        label{
+            font-size: 3vw;
+            font-family: 'montserrat';
+            letter-spacing: -5px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 2%;
+        }
+
+        input{
+            border-radius: 20px;
+            border: none;
+            height: 20px;
+            padding: 5px;
+            padding-left: 15px;
+            width: 30%;
+            font-size: 20px;
+            transition: all 0.5s;
+        }
+    }
+
+    .playlists{
+        @extend %row;
+        justify-content: space-around;
+        align-items: center;
+
+        height: 70vh;
+    }
+}

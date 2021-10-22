@@ -25,7 +25,6 @@ export class Card extends React.Component{
                 color:colorThief.getColor(img),
                 palette:colorThief.getPalette(img)
             })
-            console.log(this.state.color);
         }
 
         img.crossOrigin='Anonymous';

@@ -1,4 +1,6 @@
 import React from "react"
+import { getSeedArtists } from "../functions/Analysis"
+import { getRecentSongs } from "../functions/GetElements"
 import { Card } from "./Card"
 
 export class Tracklist extends React.Component{
@@ -9,11 +11,17 @@ export class Tracklist extends React.Component{
         super()
     }
     async componentDidMount(){
+        const params={
+            limit:50
+        }
+        const response=await getRecentSongs(params)
+        getSeedArtists(response.items)
+
         this.setState({
             tracks:[
-                '6fIjnWrv46njJHLDAY2JdC',
+                '0ocyx5iy9mdokYxTGNXkM3',
                 '0jNFDcGAXPs5ahngmD5R6n',
-                '2hsA5cjObzo1kDTJfJ1HlG'
+                '1E9FZeR3CZCgqpjaHZxlPg'
             ]
         })
     }

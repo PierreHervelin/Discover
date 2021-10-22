@@ -1,0 +1,65 @@
+#Playlist{
+    @extend %col;
+    justify-content: flex-start;
+    align-items: center;
+
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    background: $green;
+
+    .choose{
+        @extend %row;
+        justify-content: space-evenly;
+        align-items: center;
+
+        @extend %mid;
+
+        width: 100%;
+        height: fit-content;
+
+        a{
+            border: none;
+            font-size: 20px;
+            font-family: 'montserrat';
+            font-weight: bold;
+            position: relative;
+            color: black;
+            text-decoration: none;
+
+            &:hover{
+                span:last-child{
+                    opacity: 1;
+                }
+            }
+            span{
+                transition: all 1s;
+                
+                &:last-child{
+                    z-index: -1;
+                    position: absolute;
+                    right: -278px;
+                    width: 300px;
+                    opacity: 0;
+                    display: none;
+                    color: white;
+                }
+
+                &:first-child{
+                    background: white;
+                    border-radius: 20px;
+                    padding: 15px 30px 15px 30px;
+    
+                    &:hover{
+                        background: none;
+                        color: white;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

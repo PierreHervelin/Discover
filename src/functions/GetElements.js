@@ -1,3 +1,4 @@
+import axios from "axios";
 import { AccessToken } from "./Auth";
 
 const headers=new Headers({
@@ -51,5 +52,38 @@ export const getElements=async(string,type)=>{
         }
     )
     const json=await response.json()
-    return json;
+    return json
+}
+
+export const getRecommandations=async(params)=>{
+    params={
+        params,
+        headers:{
+            'Authorization': `Bearer ${AccessToken}`
+        }
+    }
+    const response = await axios.get("https://api.spotify.com/v1/recommendations/", params)
+    return response.data
+}
+
+export const getRecentSongs=async(params)=>{
+    params={
+        params,
+        headers:{
+            'Authorization': `Bearer ${AccessToken}`
+        }
+    }
+    const response=await axios.get("https://api.spotify.com/v1/me/player/recently-played", params)
+    return response.data
+}
+
+export const getUserPlaylist=async(params=null)=>{
+    params={
+        params,
+        headers:{
+            'Authorization': `Bearer ${AccessToken}`
+        }
+    }
+    const response=await axios.get("https://api.spotify.com/v1/me/playlists", params)
+    return response.data
 }
