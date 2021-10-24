@@ -70,7 +70,7 @@
             transform: scale(1.1);
         }
 
-        div{
+        .container{
             @extend %col;
             justify-content: center;
             align-items: center;
@@ -93,20 +93,74 @@
                 color: white;
                 text-shadow: 1px 1px 0 black;
                 font-family: 'montserrat';
-            }
-            button{
-                font-size: 20px;
+                margin-bottom: -10px;
                 text-align: center;
-                border: none;
-                border-radius: 50%;
-                height: 40px;
-                width: 40px;
-                transition: all 1s;
+            }
+            .artist{
+                @extend %row;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                height: fit-content;
+                width: 100%;
 
-                &:hover{
-                    cursor: pointer;
-                    background: $green;
+                h4{
+                    font-family: 'montserrat';
                     color: white;
+                    font-size: 16px;
+                }
+            }
+            .buttons{
+                @extend %row;
+                justify-content: space-around;
+                align-items: center;
+                width: 40%;
+
+                button{
+                    position: relative;
+                    font-size: 20px;
+                    text-align: center;
+                    border: none;
+                    border-radius: 50%;
+                    height: 40px;
+                    width: 40px;
+                    transform: scale(0.9);
+
+                    transition: all ease 1s;
+    
+                    &:hover{
+                        cursor: pointer;
+                        background: $green;
+                        color: white;
+                        transform: scale(1);
+                    }
+
+                    &.del{
+                        &:hover{
+                            cursor: pointer;
+                            background: red;
+                            color: white;
+                        }
+                    }
+                    &.del, &.add{
+                        height: 35px;
+                        width: 35px;
+                        font-size: 10px;
+
+                        &:hover{
+                            transform: scale(1) rotate(180deg);
+                        }
+                    }
+
+                    &.active{
+                        &.add{
+                            background: $green;
+                            color: white;
+                        }
+                        &.del{
+                            background: red;
+                            color: white;
+                        }
+                    }
                 }
             }
         }

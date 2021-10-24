@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 import Load from '../components/Load';
 import { Tracklist } from '../components/Tracklist';
+
 
 const Suggestion = () => {
     useEffect(() => {

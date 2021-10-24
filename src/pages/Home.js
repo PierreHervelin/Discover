@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { Card } from '../components/Card';
-import Load from '../components/Load';
 import { AccessToken } from '../functions/Auth';
 
 const Home = () => {

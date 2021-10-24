@@ -2,10 +2,6 @@ import { motion } from 'framer-motion';
 import React from 'react';
 
 const Load = () => {
-    setTimeout(() => {
-        const load=document.querySelector('.load')
-        load.remove()
-    },3200)
     return (
         <div className='load'>
             <motion.div

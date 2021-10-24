@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: $green;
+    background: $green2;
 
     .searchBar{
         @extend %col;
@@ -12,26 +12,82 @@
 
         position: relative;
         width: 100vw;
-        height: 30vh;
+        height: 22vh;
+        background: $green;
+
+        overflow: hidden;
 
         label{
             font-size: 3vw;
             font-family: 'montserrat';
-            letter-spacing: -5px;
+            letter-spacing: -4px;
             color: white;
             font-weight: bold;
             margin-bottom: 2%;
+            z-index: 1;
+
+            @media (max-width:1000px) {
+                letter-spacing: -1px;
+                font-size: 6vw;
+            }
+            @media (min-width:1600px) {
+                letter-spacing: -7px;
+                font-size: 3.5vw;
+            }
         }
 
-        input{
-            border-radius: 20px;
-            border: none;
-            height: 20px;
-            padding: 5px;
-            padding-left: 15px;
-            width: 30%;
-            font-size: 20px;
-            transition: all 0.5s;
+        div{
+            @extend %col;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+            height: fit-content;
+            position: relative;
+
+            input{
+                border: none;
+                height: 20px;
+                padding: 5px;
+                padding-left: 15px;
+                background: none;
+                color: white;
+                border-bottom: 3px solid white;
+                
+                width: 30%;
+                font-size: 20px;
+                transition: all 0.5s;
+                z-index: 1;
+
+                &:focus-visible{
+                    outline: none;
+                    &~div{
+                        opacity: 1;
+                        transform: translate(-50%,-50%) scale(1);
+                    }
+                }
+            }
+            div{
+                @extend %mid;
+
+                width: 800px;
+                height: 800px;
+
+                border-radius: 50%;
+                background: $green2;
+
+                opacity: 0;
+                transform: translate(-50%,-50%) scale(0.5);
+                transition: transform 0.5s ease 0.05s, opacity ease-out 1s;
+
+                &:last-child{
+                    width: 700px;
+                    height: 700px;
+                    background: $green3;
+                    transform: translate(-50%,-50%) scale(0.5);
+                    transition: transform 0.5s ease, opacity ease-out 1s;
+                }
+            }
         }
     }
 
@@ -40,6 +96,9 @@
         justify-content: space-around;
         align-items: center;
 
-        height: 70vh;
+        position: relative;
+
+        width: 100vw;
+        height: 78vh;
     }
 }

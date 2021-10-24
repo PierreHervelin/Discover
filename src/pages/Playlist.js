@@ -1,16 +1,13 @@
 import React from 'react';
-import { useEffect } from 'react/cjs/react.development';
 import Load from '../components/Load';
-import { Interval, writeEffect } from '../functions/Animations';
+import { writeEffect } from '../functions/Animations';
 import { AccessToken } from '../functions/Auth';
-import { getUserPlaylist } from '../functions/GetElements';
 
 const Playlist = () => {
     const onHover=(e)=>{
         const span=e.target.nextSibling
         if(span){
             span.style.display='inline'
-            span.dataset.display='show'
             switch (e.target.innerHTML) {
                 case 'Open':
                     writeEffect(span,'an existing playlist')
@@ -26,8 +23,36 @@ const Playlist = () => {
     const onOut=(e)=>{
         const span=e.target.nextSibling
         if(span){
-            span.dataset.display='hidden'
             span.style.display='none'
+        }
+    }
+    const onClick=(e)=>{
+        const parent=e.target.parentNode
+        if(parent){
+            parent.style.opacity=0
+            setTimeout(() => {
+                let divs
+                switch (e.target.innerHTML) {
+                    case 'Open':
+                        divs=document.querySelectorAll('.openPlaylist div')
+                        setTimeout(() => {
+                            document.getElementById('gotoOpen').click()
+                        }, 700);
+                        break
+                    case 'New':
+                        divs=document.querySelectorAll('.newPlaylist div')
+                        setTimeout(() => {
+                            document.getElementById('gotoNew').click()
+                        }, 700);
+                        break
+                    default:
+                        break
+                }
+                for(let div of divs){
+                    div.style.opacity=1
+                    div.style.transform='translate(-50%,-50%) scale(1)'
+                }
+            }, 500);
         }
     }
     return (
@@ -38,14 +63,28 @@ const Playlist = () => {
                     <span>Create playlist from scratch</span>
                 </a>
                 <a 
-                    href={`/playlist/open#access_token=${AccessToken}`}
                     onMouseEnter={onHover} 
                     onMouseOut={onOut}
+                    onClick={onClick}
                 >
                     <span>Open</span>
                     <span>Open an existing playlist</span>
                 </a>
             </div>
+            <div className='clickAnim'>
+                <div className='newPlaylist'>
+                    <div/>
+                    <div/>
+                    <div/>
+                </div>
+                <div className='openPlaylist'>
+                    <div/>
+                    <div/>
+                    <div/>
+                </div>
+            </div>
+            <a href={`/playlist/open#access_token=${AccessToken}`} id='gotoOpen'></a>
+            <a href={`/playlist/new#access_token=${AccessToken}`} id='gotoNew'></a>
             <Load/>
         </main>
     );

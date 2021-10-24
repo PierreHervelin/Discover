@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import React, { useState } from "react"
+import React from "react"
 import { Track } from "../class/Track"
 import { getTrack } from "../functions/GetElements"
 import ColorThief from "colorthief"
@@ -12,6 +12,8 @@ export class Card extends React.Component{
     }
     constructor(props){
         super(props)
+
+
     }
     async componentDidMount(){
         const track=await getTrack(this.props.idTrack)
@@ -30,6 +32,31 @@ export class Card extends React.Component{
         img.crossOrigin='Anonymous';
         img.src=this.state.track.image 
     }
+    async componentDidUpdate(prevProps){
+        if(prevProps.idTrack!=this.props.idTrack){
+            const track=await getTrack(this.props.idTrack)
+            this.setState({track:new Track(track)})
+
+            const colorThief=new ColorThief()
+            const img=new Image()
+
+            img.onload=()=>{
+                this.setState({
+                    color:colorThief.getColor(img),
+                    palette:colorThief.getPalette(img)
+                })
+            }
+
+            img.crossOrigin='Anonymous';
+            img.src=this.state.track.image
+
+            const buttons=document.querySelectorAll(`[data-id]`)
+
+            for(let button of buttons){
+                button.classList.remove('active')
+            }
+        }
+    }
     render(){
         if(this.state.track&&this.state.color){
             const play=(e)=>{
@@ -46,17 +73,25 @@ export class Card extends React.Component{
                 }
             }
             this.state.track.audio.onended=()=>{
-                const button=document.querySelector(`#play--${this.state.track.title}`)
+                const button=document.querySelector(`#play--${this.state.track.id}`)
                 button.classList.remove('icon-pause')
                 button.classList.add('icon-play')
                 button.dataset.state='pause'
             }
+
+            const children=[]
+
+            for(let artist of this.state.track.artistsName){
+                children.push(
+                    <h4 key={artist}>{artist}</h4>
+                )
+            }
+
             return(
                 <motion.div
                     className='CardAlbum'
                     layout
                     //onClick={toggleOpen}
-                    initial={{borderRadius:10}}
                 >
                     <div 
                         className='animDiv'
@@ -86,14 +121,27 @@ export class Card extends React.Component{
                             backgroundImage:`url(${this.state.track.image})`
                         }}
                     >
-                        <div>
+                        <div className='container'>
                             <h3>{this.state.track.title}</h3>
-                            <button
-                                id={`play--${this.state.track.title}`}
-                                className='icon-play' 
-                                onClick={play}
-                                data-state='pause'
-                            />
+                            <div className='artist'>{children}</div>
+                            <div className='buttons'>
+                                <button 
+                                    onClick={this.props.callback}
+                                    data-id={this.state.track.id}
+                                    className='add icon-plus'
+                                />
+                                <button
+                                    id={`play--${this.state.track.id}`}
+                                    className='icon-play' 
+                                    onClick={play}
+                                    data-state='pause'
+                                />
+                                <button    
+                                    onClick={this.props.callback}
+                                    data-id={this.state.track.id}
+                                    className='del icon-cross'
+                                />
+                            </div>
                         </div>
                     </motion.div>
                 </motion.div>
@@ -101,7 +149,6 @@ export class Card extends React.Component{
         }else{
             return (
                 <div>
-                    wait..
                 </div>
             )
         }

@@ -19,7 +19,7 @@ export const Auth=(force=false)=>{
     let redirect_uri=encodeURIComponent(
         window.location.href.substring(0,window.location.href.indexOf('/',7)+1)
     )
-    const redirect=`https://accounts.spotify.com/authorize?client_id=${client_id}&scope=user-read-recently-played&response_type=token&redirect_uri=${redirect_uri}`
+    const redirect=`https://accounts.spotify.com/authorize?client_id=${client_id}&scope=playlist-modify-public,playlist-modify-private&response_type=token&redirect_uri=${redirect_uri}`
     if(!AccessToken||force){
         window.location.replace(redirect)
     }

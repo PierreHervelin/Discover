@@ -34,6 +34,32 @@
             justify-content: flex-start;
             margin-top: 200px;
         }
+
+        .confirm{
+            position: absolute;
+            bottom: -120px;
+
+            font-family: 'montserrat';
+            font-weight: bold;
+            color: black;
+            opacity: 0;
+
+            border: none;
+            border-radius: 20px;
+            font-size: 20px;
+            padding: 10px 20px 10px 20px;
+
+            transform: scale(0.9);
+
+            transition: all ease 1s;
+
+            &:hover{
+                background: none;
+                color: white;
+                cursor: pointer;
+                transform: scale(1);
+            }
+        }
     }
 
     h2{
