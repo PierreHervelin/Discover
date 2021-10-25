@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: $green2;
+    background: $green;
 
     .searchBar{
         @extend %col;
@@ -13,7 +13,6 @@
         position: relative;
         width: 100vw;
         height: 22vh;
-        background: $green;
 
         overflow: hidden;
 

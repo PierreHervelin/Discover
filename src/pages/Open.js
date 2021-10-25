@@ -7,7 +7,7 @@ const Open = () => {
     return (
         <main id='Open'>
             <div className='searchBar'>
-                <label>What's her name ?</label>
+                <label>What's its name ?</label>
                 <div>
                     <input
                         type='text'

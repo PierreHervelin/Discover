@@ -26,28 +26,4 @@ export class Track{
             this.artistsName.push(artist.name)
         }
     }
-
-    async build(){
-        this.features=await getTrackFeatures(this.id)
-    }
-    getGenre(){
-        return new Promise((resolve)=>{
-            let i=0
-            let genres=[]
-            const interval=setInterval(async() => {
-                if(i===this.artists.length){
-                    clearInterval(interval)
-                    resolve(genres)
-                    return
-                }
-                const artist=await getArtist(this.artists[i])
-                for(let i in artist.genres){
-                    if(!genres.includes(artist.genres[i])){
-                        genres.push(artist.genres[i])
-                    }
-                }
-                i++
-            }, 300);
-        })
-    }
 }

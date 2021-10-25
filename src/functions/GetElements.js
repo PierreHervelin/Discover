@@ -87,17 +87,15 @@ export const getPlaylist=async(id,params=null)=>{
     return response.data
 }
 
-export const getTrackFeatures=async(id)=>{
-    const params={
+export const getTrackFeatures=async(params)=>{
+    params={
+        params,
         headers:{
             'Authorization': `Bearer ${AccessToken}`
         }
     }
-    if(id){
-        const response=await axios.get(`https://api.spotify.com/v1/audio-features/${id}`, params)
-        return response.data
-    }
-    return
+    const response=await axios.get(`https://api.spotify.com/v1/audio-features`, params)
+    return response.data
 }
 
 export const getPlaylistItems=async(id,offset)=>{

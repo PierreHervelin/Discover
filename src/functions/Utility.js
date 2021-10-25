@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export const msToTime=(millisec)=>{
     var seconds = (millisec / 1000).toFixed(0);
     var minutes = Math.floor(seconds / 60);
@@ -15,4 +17,19 @@ export const msToTime=(millisec)=>{
         return hours + ":" + minutes + ":" + seconds;
     }
     return minutes + ":" + seconds;
+}
+
+export const randomPickInArray=(array,n)=>{
+    const shuffled=array.sort(() => 0.5 - Math.random())
+    let selected=shuffled.slice(0, n)
+
+    return selected
+}
+
+export const usePrevious=(val)=>{
+    const ref=useRef();
+    useEffect(()=>{
+        ref.current=val
+    })
+    return ref.current
 }

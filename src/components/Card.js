@@ -7,9 +7,9 @@ import ColorThief from "colorthief"
 export class Card extends React.Component{
     state={
         track:null,
-        palette:null,
-        color:null
     }
+    palette
+    color
     constructor(props){
         super(props)
 
@@ -17,48 +17,43 @@ export class Card extends React.Component{
     }
     async componentDidMount(){
         const track=await getTrack(this.props.idTrack)
+        
+        await this.loadImage(track.album.images[0].url)
+
         this.setState({track:new Track(track)})
-
-        const colorThief=new ColorThief()
-        const img=new Image()
-
-        img.onload=()=>{
-            this.setState({
-                color:colorThief.getColor(img),
-                palette:colorThief.getPalette(img)
-            })
-        }
-
-        img.crossOrigin='Anonymous';
-        img.src=this.state.track.image 
     }
     async componentDidUpdate(prevProps){
         if(prevProps.idTrack!=this.props.idTrack){
             const track=await getTrack(this.props.idTrack)
-            this.setState({track:new Track(track)})
 
-            const colorThief=new ColorThief()
-            const img=new Image()
-
-            img.onload=()=>{
-                this.setState({
-                    color:colorThief.getColor(img),
-                    palette:colorThief.getPalette(img)
-                })
-            }
-
-            img.crossOrigin='Anonymous';
-            img.src=this.state.track.image
+            await this.loadImage(track.album.images[0].url)
 
             const buttons=document.querySelectorAll(`[data-id]`)
 
             for(let button of buttons){
                 button.classList.remove('active')
             }
+
+            this.setState({track:new Track(track)})
         }
     }
+    loadImage(url){
+        return new Promise((resolve)=>{
+            const img=new Image()
+            const colorThief=new ColorThief()
+
+            img.crossOrigin='Anonymous'
+            img.src=url 
+
+            img.onload=()=>{
+                this.color=colorThief.getColor(img)
+                this.palette=colorThief.getPalette(img)
+                resolve('loaded')
+            }
+        })
+    }
     render(){
-        if(this.state.track&&this.state.color){
+        if(this.state.track){
             const play=(e)=>{
                 if(e.target.dataset.state==='play'){
                     e.target.classList.remove('icon-pause')
@@ -97,21 +92,21 @@ export class Card extends React.Component{
                         className='animDiv'
                         id='first'
                         style={{
-                            backgroundColor:`rgb(${this.state.color[0]},${this.state.color[1]},${this.state.color[2]})`
+                            backgroundColor:`rgb(${this.color[0]},${this.color[1]},${this.color[2]})`
                         }}
                     ></div>
                     <div 
                         className='animDiv'
                         id='second'
                         style={{
-                            backgroundColor:`rgb(${this.state.palette[1][0]},${this.state.palette[1][1]},${this.state.palette[1][2]})`
+                            backgroundColor:`rgb(${this.palette[1][0]},${this.palette[1][1]},${this.palette[1][2]})`
                         }}
                     ></div>
                     <div 
                         className='animDiv'
                         id='last'
                         style={{
-                            backgroundColor:`rgb(${this.state.palette[3][0]},${this.state.palette[3][1]},${this.state.palette[3][2]})`
+                            backgroundColor:`rgb(${this.palette[3][0]},${this.palette[3][1]},${this.palette[3][2]})`
                         }}
                     ></div>
                     <motion.div 

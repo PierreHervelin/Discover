@@ -15,6 +15,11 @@
         transform: scale(1.1);
         background: $green4;
         box-shadow: 1px 1px 50px rgba(#000000,0.5);
+        div{
+            &:first-child+div+div{
+                opacity: 1;
+            }
+        }
     }
 
     div{
@@ -38,6 +43,14 @@
             font-size: 18px;
             font-weight: bold;
             letter-spacing: -1px;
+        }
+        &:first-child+div+div{
+            text-align: center;
+            font-family: 'montserrat';
+            font-size: 15px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity ease 1s;
         }
     }
 

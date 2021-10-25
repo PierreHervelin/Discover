@@ -1,8 +1,10 @@
 import React from "react"
 import { Track } from "../class/Track"
 import { addItemsToPlaylist } from "../functions/addElements"
-import { getPlaylist, getPlaylistItems, getRecommandations } from "../functions/GetElements"
+import { getPlaylist, getPlaylistItems, getRecommandations, getTrackFeatures } from "../functions/GetElements"
+import { randomPickInArray } from "../functions/Utility"
 import { Card } from "./Card"
+import Loading from "./Loading"
 
 export class Tracklist extends React.Component{
     state={
@@ -14,8 +16,6 @@ export class Tracklist extends React.Component{
     pageLoad=false
     informations={
         index:0,
-        genres:[],
-        artists:[],
         features:{
             acousticness:0,
             danceability:0,
@@ -26,64 +26,35 @@ export class Tracklist extends React.Component{
             speechiness:0,
             tempo:0
         },
-        items:[]
+        items:[],
+        unlikeItems:[]
     }
     constructor(){
         super()
         this.idPlaylist=new URLSearchParams(window.location.search).get('id')
-        this.searchLoop()
         this.buttonClick=this.buttonClick.bind(this)
     }
-    getNewInformations(){
+    async _init(){
         return new Promise(async(resolve)=>{
-            this.playlist=await getPlaylist(
-                this.idPlaylist,
-                {limit:1,offset:this.informations.index}
-            )
-            
-            if(this.informations.items.length!=this.playlist.total){
+            let i=0
+            const interval=setInterval(async() => {
                 const response=await getPlaylistItems(
                     this.idPlaylist,
-                    (this.informations.index*50)
+                    (i*50)
                 )
+                this.playlist=response
                 for(let item of response.items){
                     this.informations.items.push(item.track.id)
 
                     const loading=document.querySelector('.progress-bar')
                     loading.style.width=`${(this.informations.items.length*100)/this.playlist.total}%`
                 }
-            }else if(!this.pageLoad){
-                this.pageLoad=true
-                this.setSuggestion()
-            }
-
-            const track=new Track(this.playlist.items[0].track)
-            await track.build()
-
-            for(let key in this.informations.features){
-                this.informations.features[key]+=track.features[key]
-            }
-
-            for(let artist of track.artists){
-                if(!this.informations.artists.includes(artist)){
-                    this.informations.artists.push(artist)
+                i++
+                if(this.informations.items.length===response.total){
+                    clearInterval(interval)
+                    resolve('finish')
                 }
-            }
-            let trackGenres=await track.getGenre()
-
-            for(let genre of trackGenres){
-                if(!this.informations.genres.includes(genre)){
-                    this.informations.genres.push(genre)
-                }
-            }
-
-            this.informations.index++
-
-            if(this.informations.index==this.playlist.total){
-                resolve(true)
-                return
-            }
-            resolve(false)
+            }, 300);
         })
     }
     buttonClick(e){
@@ -94,10 +65,6 @@ export class Tracklist extends React.Component{
             if(this.tracks[i].id===target.dataset.id){
                 break
             }
-        }
-
-        if(!this.informations.items.includes(target.dataset.id)){
-            this.informations.items.push(target.dataset.id)
         }
 
         target.classList.add('active')
@@ -148,110 +115,108 @@ export class Tracklist extends React.Component{
 
         for(let track of this.tracks){
             if(track.isPush){
+                this.informations.items.push(track.id)
                 uris.push(track.uri)
+            }else{
+                this.informations.unlikeItems.push(track.id)
             }
         }
         console.log(uris);
         if(uris.length>0){
             const response=await addItemsToPlaylist(uris,this.idPlaylist)
-            console.log(response)
         }
         this.setSuggestion()
     }
-    async searchLoop(){
-        const response=await this.getNewInformations()
-        if(response){
-            return
+    getRandomFeatures(features){
+        let selectedFeatures=randomPickInArray(features.audio_features,5)
+
+        this.informations.features={
+            acousticness:0,
+            danceability:0,
+            energy:0,
+            instrumentalness:0,
+            liveness:0,
+            loudness:0,
+            speechiness:0,
+            tempo:0
         }
-        setTimeout(() => {
-            requestAnimationFrame(()=>{this.searchLoop()})
-        }, 400);
+        let selectedTracks=[]
+
+        for(let feature of selectedFeatures){
+            selectedTracks.push(feature.id)
+            for(let key in feature){
+                if(this.informations.features[key]!=undefined){
+                    this.informations.features[key]+=feature[key]
+                }
+            }
+        }
+        return selectedTracks.toString()
     }
     async setSuggestion(){
         if(this.state.isLoad){
             await this.setState({isLoad:false})
         }
 
+        let selectedItems=randomPickInArray(this.informations.items,100)
+
+        const features=await getTrackFeatures({ids:selectedItems.toString()})
+
+
 
         const loading=document.querySelector('.progress-bar')
         loading.style.width='1%'
 
-        const track1=await this.getNewTrack()
+        const track1=await this.getNewTrack(this.getRandomFeatures(features))
         loading.style.width='33%'
-        const track2=await this.getNewTrack([track1.id])
+        const track2=await this.getNewTrack(this.getRandomFeatures(features),[track1.id])
         loading.style.width='66%'
-        const track3=await this.getNewTrack([track1.id,track2.id])
+        const track3=await this.getNewTrack(this.getRandomFeatures(features),[track1.id,track2.id])
         loading.style.width='100%'
-        console.log(track3);
 
         this.tracks=[track1,track2,track3]
         this.setState({isLoad:true})
     }
-    getNewTrack(prevTracks=null){
+    getNewTrack(seed_tracks,prevTracks=null){
         return new Promise(async(resolve)=>{
-            const seeds=this.getSeeds()
-
             const features=this.informations.features
-            const index=this.informations.index
-
-            const seed_artists=seeds.seed_artists
-            const seed_genres=seeds.seed_genres
-            const seed_tracks=seeds.seed_tracks
-
             const interval=setInterval(async() => {
                 const tracks=await getRecommandations({
                     limit:100,
                     seed_tracks,
-                    target_acousticness:features.acousticness/index,
-                    target_danceability:features.danceability/index,
-                    target_energy:features.energy/index,
-                    target_instrumentalness:features.instrumentalness/index,
-                    target_liveness:features.liveness/index,
-                    target_loudness:features.loudness/index,
-                    target_speechiness:features.speechiness/index
+                    target_acousticness:features.acousticness/5,
+                    target_danceability:features.danceability/5,
+                    target_energy:features.energy/5,
+                    target_instrumentalness:features.instrumentalness/5,
+                    target_liveness:features.liveness/5,
+                    target_loudness:features.loudness/5,
+                    target_speechiness:features.speechiness/5
                 })
-                for(let track of tracks.tracks){
+                let track
+                let isNew=false
+                for(track of tracks.tracks){
                     if(!this.informations.items.includes(track.id)){
                         if(prevTracks){
-                            if(!prevTracks.includes(track.id)){
-                                clearInterval(interval)
-                                resolve(new Track(track))
-                                return
+                            if(prevTracks.includes(track.id)){
+                                continue
                             }
-                        }else{
-                            clearInterval(interval)
-                            resolve(new Track(track))
-                            return
                         }
-                        
+                        if(!this.informations.unlikeItems.includes(track.id)){
+                            isNew=true
+                            break
+                        }
                     }
+                }
+                if(isNew){
+                    clearInterval(interval)
+                    resolve(new Track(track))
+                    return
                 }
             }, 400);
         })
     }
-    getSeeds(){
-        let seed_artists='',
-            seed_genres='',
-            seed_tracks=''
-
-        let limit=(this.informations.artists.length>=5)?5:this.informations.artists.length
-        
-        for(let i=0;i<limit;i++){
-            let pick=Math.floor(Math.random()*this.informations.artists.length)
-            seed_artists+=`${this.informations.artists[pick]},`
-
-            pick=Math.floor(Math.random()*this.informations.genres.length)
-            seed_genres+=`${this.informations.genres[pick]},`
-
-            pick=Math.floor(Math.random()*this.informations.items.length)
-            seed_tracks+=`${this.informations.items[pick]},`
-        }
-
-        seed_artists=seed_artists.slice(0,-1)
-        seed_genres=seed_genres.slice(0,-1)
-        seed_tracks=seed_tracks.slice(0,-1)
-
-        return {seed_artists,seed_genres,seed_tracks}
+    async componentDidMount(){
+        await this._init()
+        this.setSuggestion()
     }
     render(){
         if(this.state.isLoad){
@@ -267,11 +232,7 @@ export class Tracklist extends React.Component{
             )
         }
         return (
-            <div className='Loading'>
-                <div className='container'>
-                    <div className='progress-bar'></div>
-                </div>
-            </div>
+            <Loading/>
         )
     }
 }

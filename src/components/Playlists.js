@@ -1,25 +1,58 @@
-import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Playlist } from '../class/Playlist';
 import { AccessToken } from '../functions/Auth';
 import { getUserPlaylist } from '../functions/GetElements';
+import { usePrevious } from '../functions/Utility';
+import Loading from './Loading';
+
+const AllPlaylists=[]
+let isLoad=false
 
 const Playlists = (props) => {
     const [playlists,setPlaylists]=useState([])
 
+    const getAllPlaylists=()=>{
+        return new Promise((resolve)=>{
+            const loading=document.querySelector('.progress-bar')
+            const interval=setInterval(async() => {
+                const response=await getUserPlaylist({limit:50,offset:AllPlaylists.length})
+                for(let playlist of response.items){
+                    AllPlaylists.push(playlist)
+                    loading.style.width=`${(AllPlaylists.length*100)/response.total}%`
+                }
+                console.log(response.total,AllPlaylists.length);
+                if(AllPlaylists.length==response.total){
+                    clearInterval(interval)
+                    isLoad=true
+                    resolve('done')
+                    return
+                }
+            }, 600);
+        })
+    }
+
     const getPlaylists=async()=>{
-        const response=await getUserPlaylist({limit:50})
+        if(!AllPlaylists.length){
+            await getAllPlaylists()
+            console.log(AllPlaylists);
+        }
         let temp=[]
-        for(let i of response.items){
-            if(i.name.indexOf(props.playlistName)===0){
+        for(let i of AllPlaylists){
+            if(i.images.length&&i.name.indexOf(props.playlistName)===0){
                 temp.push(new Playlist(i))
+                console.log(i);
                 if(temp.length===3) break
             }
         }
         setPlaylists(temp)
     }
 
-    getPlaylists()
+    const prev=usePrevious(props.playlistName)
+    useEffect(()=>{
+        if(props.playlistName!=prev){
+            getPlaylists()
+        }
+    })
 
     if(playlists.length>0){
         const children=[]
@@ -36,6 +69,7 @@ const Playlists = (props) => {
                 >
                     <div style={{backgroundImage:`url(${playlists[i].image})`}}/>
                     <div>{playlists[i].name}</div>
+                    <div>{`${playlists[i].total} tracks`}</div>
                     <a href={`/suggestion?id=${playlists[i].id}#access_token=${AccessToken}`}></a>
                 </div>
             )
@@ -44,6 +78,11 @@ const Playlists = (props) => {
             <div className='playlist-container'>
                 {children}
             </div>
+        )
+    }
+    if(!isLoad){
+        return(
+            <Loading/>
         )
     }
     return (
