@@ -32,6 +32,11 @@
             height: 1200px;
         }
 
+        &.animDivHover{
+            opacity: 1;
+            transform: translate(-50%,-50%) scale(1);
+        }
+
         &#first{
             z-index: -1;
             transition: transform 1s ease 0.2s, opacity 0.5s;
@@ -66,6 +71,11 @@
         }
 
         &:hover{
+            z-index: 5;
+            transform: scale(1.1);
+        }
+
+        &.coverAlbumHover{
             z-index: 5;
             transform: scale(1.1);
         }

@@ -176,6 +176,38 @@ export class Tracklist extends React.Component{
         this.tracks=[track1,track2,track3]
         this.setState({isLoad:true})
     }
+    animation(){
+        const animDiv=document.querySelectorAll('.animDiv')
+        const coverAlbum=document.querySelectorAll('.coverAlbum')
+        console.log(animDiv);
+        let i=0
+        const interval=setInterval(() => {
+            if(i===3){
+                clearInterval(interval)
+                animDiv[i*3-1].classList.remove('animDivHover')
+                animDiv[i*3-2].classList.remove('animDivHover')
+                animDiv[i*3-3].classList.remove('animDivHover')
+                coverAlbum[i-1].classList.remove('coverAlbumHover')
+                return
+            }
+
+            animDiv[i*3].classList.add('animDivHover')
+            animDiv[i*3+1].classList.add('animDivHover')
+            animDiv[i*3+2].classList.add('animDivHover')
+
+
+            coverAlbum[i].classList.add('coverAlbumHover')
+
+            if(i>0){
+                animDiv[i*3-1].classList.remove('animDivHover')
+                animDiv[i*3-2].classList.remove('animDivHover')
+                animDiv[i*3-3].classList.remove('animDivHover')
+                coverAlbum[i-1].classList.remove('coverAlbumHover')
+            }
+
+            i++
+        }, 2000);
+    }
     getNewTrack(seed_tracks,prevTracks=null){
         return new Promise(async(resolve)=>{
             const features=this.informations.features

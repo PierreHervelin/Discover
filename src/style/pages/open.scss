@@ -1,9 +1,10 @@
 #Open{
     @extend %col;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     overflow: hidden;
     background: $green;
+    height: 100vh;
 
     .searchBar{
         @extend %col;
@@ -44,48 +45,58 @@
             height: fit-content;
             position: relative;
 
+            pointer-events: none;
+
+            &:hover{
+                div{
+                    transform: translate(-50%,-50%) rotate(360deg);
+                    opacity: 0;
+                    transition: all ease 1s;
+                }
+                input{
+                    transform: scaleX(1);
+                    border-radius: 8px;
+                    transition: transform ease 1s 0.5s,border-radius 0.5s;
+                }
+            }
+
             input{
                 border: none;
-                height: 20px;
+                height: 12px;
                 padding: 5px;
                 padding-left: 15px;
-                background: none;
-                color: white;
-                border-bottom: 3px solid white;
+                background: white;
+                border-radius: 50%;
+                color: black;
+                pointer-events: auto;
                 
                 width: 30%;
-                font-size: 20px;
-                transition: all 0.5s;
+                font-size: 15px;
+                transition: transform ease 1s 0.5s,border-radius 0.5s ease-out 1s;
                 z-index: 1;
+                transform: scaleX(0);
 
                 &:focus-visible{
                     outline: none;
-                    &~div{
-                        opacity: 1;
-                        transform: translate(-50%,-50%) scale(1);
+                    transform: scaleX(1);
+                    border-radius: 8px;
+
+                    &+div{
+                        opacity: 0;
+                        transform: translate(-50%,-50%) scale(0);
+                        transition: all ease-in 1s;
                     }
                 }
             }
             div{
                 @extend %mid;
+                
+                color: white;
+                font-size: 25px;
+                width: fit-content;
 
-                width: 800px;
-                height: 800px;
-
-                border-radius: 50%;
-                background: $green2;
-
-                opacity: 0;
-                transform: translate(-50%,-50%) scale(0.5);
-                transition: transform 0.5s ease 0.05s, opacity ease-out 1s;
-
-                &:last-child{
-                    width: 700px;
-                    height: 700px;
-                    background: $green3;
-                    transform: translate(-50%,-50%) scale(0.5);
-                    transition: transform 0.5s ease, opacity ease-out 1s;
-                }
+                pointer-events: auto;
+                transition: all ease-out 1s 1s;
             }
         }
     }
@@ -95,9 +106,10 @@
         justify-content: space-around;
         align-items: center;
 
-        position: relative;
+        @extend %mid;
+        transform: translate(-50%,-35%);
 
         width: 100vw;
-        height: 78vh;
+        height: fit-content;
     }
 }

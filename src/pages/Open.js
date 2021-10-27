@@ -16,8 +16,7 @@ const Open = () => {
                         }}
                         value={playlistName}
                     />
-                    <div/>
-                    <div/>
+                    <div className='icon-search'/>
                 </div>
             </div>
             <div className='playlists'>
