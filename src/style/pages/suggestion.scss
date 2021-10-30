@@ -80,4 +80,127 @@
             font-size: 4.5vw;
         }
     }
+
+    .volume{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 35px;
+
+        @extend %row;
+        justify-content: center;
+        align-items: center;
+
+        width: fit-content;
+        height: fit-content;
+        pointer-events: none;
+
+        &:hover{
+            .volume-bar-container{
+                .volume-bar{
+                    transform: translate(0%,0);
+                }
+            }
+        }
+        .volume-bar-container{
+            overflow: hidden;
+
+            height: fit-content;
+            width: fit-content;
+            margin-bottom: 3px;
+
+            position: relative;
+            pointer-events: none;
+
+            .volume-bar{
+                height: 100%;
+                width: 100%;
+    
+                position: relative;
+                transform: translate(100%,0);
+    
+                transition: transform ease 1s;
+
+                pointer-events: auto;
+    
+                input{
+                    -webkit-appearance: none;
+                    padding: 0;
+                    font: inherit;
+                    outline: none;
+                    border: none;
+                    color: $green4;
+                    background: white;
+                    height: 6px;
+                    border-radius: 5px;
+        
+                    &::-webkit-slider-thumb{
+                        -webkit-appearance: none;
+                        z-index: 99;
+                        width: 10px;
+                        height: 15px;
+                        border-radius: 5px;
+                        background: $background;
+                        transition: all ease 0.5s;
+        
+                        &:hover{
+                            background: $subBackground3;
+                            cursor: pointer;
+                            height: 20px;
+                        }
+                    }
+                    &::-moz-range-thumb{
+                        -webkit-appearance: none;
+                        z-index: 99;
+                        width: 10px;
+                        height: 15px;
+                        border-radius: 5px;
+                        outline: none;
+                        border: none;
+                        background: $background;
+                        transition: all ease 0.5s;
+        
+                        &:hover{
+                            background: $subBackground3;
+                            cursor: pointer;
+                            height: 20px;
+                        }
+                    }
+                    &::-ms-fill-lower{
+                        background: $background;
+                    }
+                }
+    
+                div{
+                    background: $background;
+                    position: absolute;
+                    top: 8px;
+                    left: 0;
+                    height: 6px;
+                    border-radius: 5px;
+                    pointer-events: none;
+                }
+                @-moz-document url-prefix() {
+                    div{
+                        top: 7px;
+                    }
+                }
+            }
+        }
+
+        button{
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            transition: all ease .5s;
+            pointer-events: auto;
+
+            &:hover{
+                opacity: .8;
+                transform: scale(1.1);
+                cursor: pointer;
+            }
+        }
+    }
 }

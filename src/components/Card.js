@@ -3,10 +3,11 @@ import React from "react"
 import { Track } from "../class/Track"
 import { getTrack } from "../functions/GetElements"
 import ColorThief from "colorthief"
+import { Extract } from "../pages/Suggestion"
 
 export class Card extends React.Component{
     state={
-        track:null,
+        track:null
     }
     palette
     color
@@ -67,7 +68,33 @@ export class Card extends React.Component{
                     this.state.track.audio.play()
                 }
             }
-            this.state.track.audio.onended=()=>{
+            const togglePlay=(e)=>{
+                const buttons=document.querySelectorAll('.play-button')
+                if(e.target.dataset.state==='play'){
+                    e.target.classList.remove('icon-play')
+                    e.target.classList.add('icon-pause')
+                    e.target.dataset.state='pause'
+
+                    for(let button of buttons){
+                        if(button.isEqualNode(e.target)) continue
+
+                        if(button.dataset.state==='pause'){
+                            button.classList.remove('icon-pause')
+                            button.classList.add('icon-play')
+                            button.dataset.state='play'
+                        }
+                    }
+
+                    Extract.src=this.state.track.audio
+                    Extract.play()
+                }else{
+                    e.target.classList.remove('icon-pause')
+                    e.target.classList.add('icon-play')
+                    e.target.dataset.state='play'
+                    Extract.pause()
+                }
+            }
+            Extract.onended=()=>{
                 const button=document.querySelector(`#play--${this.state.track.id}`)
                 button.classList.remove('icon-pause')
                 button.classList.add('icon-play')
@@ -124,17 +151,20 @@ export class Card extends React.Component{
                                     onClick={this.props.callback}
                                     data-id={this.state.track.id}
                                     className='add icon-plus'
+                                    title='add to playlist'
                                 />
                                 <button
                                     id={`play--${this.state.track.id}`}
-                                    className='icon-play' 
-                                    onClick={play}
-                                    data-state='pause'
+                                    data-url={this.state.track.audio}
+                                    className='play-button icon-play'
+                                    onClick={togglePlay}
+                                    data-state='play'
                                 />
                                 <button    
                                     onClick={this.props.callback}
                                     data-id={this.state.track.id}
                                     className='del icon-cross'
+                                    title="don't add to playlist"
                                 />
                             </div>
                         </div>

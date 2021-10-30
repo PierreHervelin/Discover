@@ -38,6 +38,34 @@ button{
     text-align: center;
 }
 
+.icon-arrow-long-left{
+    position: absolute;
+    top: 0; left: 0;
+
+    font-size: 30px;
+    font-weight: lighter;
+    //background: white;
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+
+    padding: 0px 15px 0px 15px;
+    margin: 20px;
+    margin-left: 35px;
+
+    z-index: 99;
+
+    transition: all ease 1s;
+
+    &:hover{
+        cursor: pointer;
+        background: $green;
+        color: black;
+        transform: scale(1.1);
+    }
+}
+
 .load{
     width: 100%;
     height: 100%;

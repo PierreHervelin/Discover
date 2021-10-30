@@ -1,7 +1,7 @@
 import React from "react"
 import { Track } from "../class/Track"
 import { addItemsToPlaylist } from "../functions/addElements"
-import { getPlaylist, getPlaylistItems, getRecommandations, getTrackFeatures } from "../functions/GetElements"
+import { getPlaylistItems, getRecommandations, getTrackFeatures } from "../functions/GetElements"
 import { randomPickInArray } from "../functions/Utility"
 import { Card } from "./Card"
 import Loading from "./Loading"
@@ -26,13 +26,15 @@ export class Tracklist extends React.Component{
             speechiness:0,
             tempo:0
         },
-        items:[],
-        unlikeItems:[]
+        items:[]
     }
+    unlikeItems
     constructor(){
         super()
         this.idPlaylist=new URLSearchParams(window.location.search).get('id')
         this.buttonClick=this.buttonClick.bind(this)
+        this.unlikeItems=(localStorage.getItem(this.idPlaylist))?JSON.parse(localStorage.getItem(this.idPlaylist)):[]
+        console.log(this.unlikeItems);
     }
     async _init(){
         return new Promise(async(resolve)=>{
@@ -118,7 +120,11 @@ export class Tracklist extends React.Component{
                 this.informations.items.push(track.id)
                 uris.push(track.uri)
             }else{
-                this.informations.unlikeItems.push(track.id)
+                this.unlikeItems.push(track.id)
+                localStorage.setItem(
+                    this.idPlaylist,
+                    JSON.stringify(this.unlikeItems)
+                )              
             }
         }
         console.log(uris);
@@ -211,6 +217,7 @@ export class Tracklist extends React.Component{
     getNewTrack(seed_tracks,prevTracks=null){
         return new Promise(async(resolve)=>{
             const features=this.informations.features
+
             const interval=setInterval(async() => {
                 const tracks=await getRecommandations({
                     limit:100,
@@ -232,7 +239,7 @@ export class Tracklist extends React.Component{
                                 continue
                             }
                         }
-                        if(!this.informations.unlikeItems.includes(track.id)){
+                        if(!this.unlikeItems.includes(track.id)){
                             isNew=true
                             break
                         }

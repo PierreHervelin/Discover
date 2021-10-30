@@ -21,7 +21,7 @@ const Playlists = (props) => {
                     loading.style.width=`${(AllPlaylists.length*100)/response.total}%`
                 }
                 console.log(response.total,AllPlaylists.length);
-                if(AllPlaylists.length==response.total){
+                if(AllPlaylists.length>=response.total){
                     clearInterval(interval)
                     isLoad=true
                     resolve('done')
