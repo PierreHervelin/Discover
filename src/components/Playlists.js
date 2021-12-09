@@ -14,6 +14,14 @@ const Playlists = (props) => {
     const getAllPlaylists=()=>{
         return new Promise((resolve)=>{
             const loading=document.querySelector('.progress-bar')
+            const response=await getUserPlaylist({limit:50,offset:AllPlaylists.length})
+            for(let playlist of response.items){
+                AllPlaylists.push(playlist)
+                loading.style.width=`${(AllPlaylists.length*100)/50}%`
+            }
+            isLoad=true
+            resolve('done')
+            /*
             const interval=setInterval(async() => {
                 const response=await getUserPlaylist({limit:50,offset:AllPlaylists.length})
                 for(let playlist of response.items){
@@ -28,6 +36,7 @@ const Playlists = (props) => {
                     return
                 }
             }, 600);
+            */
         })
     }
 
