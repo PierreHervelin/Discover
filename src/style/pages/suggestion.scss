@@ -85,7 +85,7 @@
         position: absolute;
         right: 0;
         bottom: 0;
-        margin: 35px;
+        margin: 25px;
 
         @extend %row;
         justify-content: center;
@@ -94,8 +94,11 @@
         width: fit-content;
         height: fit-content;
         pointer-events: none;
+        padding: 10px;
 
         &:hover{
+            pointer-events: auto;
+
             .volume-bar-container{
                 .volume-bar{
                     transform: translate(0%,0);

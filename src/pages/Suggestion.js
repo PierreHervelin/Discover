@@ -42,7 +42,7 @@ const Suggestion = () => {
     })
     return (
         <main id='Suggestion'>
-            <h2>You have to listen to these songs,</h2>
+            <h2>Choose songs to add,</h2>
             <Tracklist/>
             <Load/>
             <div className='volume'>
