@@ -11,8 +11,7 @@ let isLoad=false
 const Playlists = (props) => {
     const [playlists,setPlaylists]=useState([])
 
-    const getAllPlaylists=()=>{
-        return new Promise((resolve)=>{
+    const getAllPlaylists=async()=>{
             const loading=document.querySelector('.progress-bar')
             const response=await getUserPlaylist({limit:50,offset:AllPlaylists.length})
             for(let playlist of response.items){
@@ -20,7 +19,6 @@ const Playlists = (props) => {
                 loading.style.width=`${(AllPlaylists.length*100)/50}%`
             }
             isLoad=true
-            resolve('done')
             /*
             const interval=setInterval(async() => {
                 const response=await getUserPlaylist({limit:50,offset:AllPlaylists.length})
@@ -37,7 +35,6 @@ const Playlists = (props) => {
                 }
             }, 600);
             */
-        })
     }
 
     const getPlaylists=async()=>{
