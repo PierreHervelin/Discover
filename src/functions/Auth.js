@@ -17,7 +17,7 @@ export const AccessToken = getUrlParameter('access_token')
 export const Auth=(force=false)=>{
     let client_id='90f771bb92a4477ab62ef3636f1d6777'
     let redirect_uri=encodeURIComponent(
-        window.location.href.substring(0,window.location.href.indexOf('/',7)+1)
+        'https://lit-citadel-02270.herokuapp.com/'
     )
     const redirect=`https://accounts.spotify.com/authorize?client_id=${client_id}&scope=playlist-modify-public,playlist-modify-private&response_type=token&redirect_uri=${redirect_uri}`
     if(!AccessToken||force){
